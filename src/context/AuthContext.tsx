@@ -30,7 +30,6 @@ export function AuthProvider({ children } : Props) {
   useEffect(() => {
     const subscribed = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
-        console.log("no hay usuario suscrito");
         setUser("");
       } else {
         setUser(currentUser);
@@ -45,22 +44,28 @@ export function AuthProvider({ children } : Props) {
       email,
       password
     );
-    console.log(response);
   };
 
   const login = async (email: string, password: string) => {
-    const response = await signInWithEmailAndPassword(auth, email, password);
-    console.log(response);
+    try{
+      const response = await signInWithEmailAndPassword(auth, email, password);
+    }catch{
+      logout()
+    }
   };
 
   const loginWithGoogle = async () => {
-    const responseGoogle = new GoogleAuthProvider();
-    return await signInWithPopup(auth, responseGoogle);
+    try{
+      logout()
+      const responseGoogle = new GoogleAuthProvider();
+      return await signInWithPopup(auth, responseGoogle);
+    }catch{
+      logout()
+    }
   };
 
   const logout = async () => {
     const response = await signOut(auth);
-    console.log(response);
   };
   return (
     <authContext.Provider

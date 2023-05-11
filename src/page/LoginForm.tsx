@@ -9,22 +9,24 @@ function LoginForm() {
   const auth = useAuth();
   //importar state
   const {displayName} = auth.user
-  const [emailRegister, setEmailRegister] = useState("");
-  const [passwordRegister, setPasswordRegister] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [vistas, setVistas] = useState("prueba");
   const [isAuth, setIsAuth] = useState(undefined);
 
   //funciones logueo
-  // const handleRegister = (e:any) => {
-  //   e.preventDefault();
-  //   auth.register(emailRegister, passwordRegister);
-  // };
+  const handleRegister = (e:any) => {
+    e.preventDefault();
+    if(email && password){
+      auth.register(email, password);
+    }
+  };
   const handleLogin = (e:any) => {
     e.preventDefault();
-    auth.login(email, password);
-    setIsAuth(auth.user['accessToken'])
+    if(email && password){
+      auth.login(email, password);
+      setIsAuth(auth.user['accessToken'])
+    }
   };
   const handleGoogle = (e:any) => {
     e.preventDefault();
@@ -32,10 +34,18 @@ function LoginForm() {
     setIsAuth(auth.user['accessToken'])
   };
 
+  useEffect(() => {
+    const getAuth = async () => {
+      auth.login(email, password);
+      setIsAuth(auth.user['accessToken'])
+    };
+    getAuth();
+}, []);
+
   return (
     <div>
       {isAuth==undefined? (
-        <FormularioSesion setEmail={setEmail} setPassword={setPassword} handleLogin={handleLogin} handleGoogle={handleGoogle}/>
+        <FormularioSesion setEmail={setEmail} setPassword={setPassword} handleRegister={handleRegister} handleLogin={handleLogin} handleGoogle={handleGoogle}/>
       ) : (
         <Home isAuth={isAuth} setIsAuth={setIsAuth}></Home>
       )}

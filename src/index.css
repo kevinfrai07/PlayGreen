@@ -1,7 +1,15 @@
 body{
-  background-color: #9e3737;
   overflow-y: hidden;
   overflow-x: hidden;
+}
+.App{
+  height: 100vh;
+  margin-top: 30vh;
+  font-family: 'DM Sans'
+
+}
+.title{
+  font-size: 3rem;
 }
 .homeImage{
   object-fit: fill;
@@ -21,6 +29,12 @@ body{
   width: 3rem;
   color: #222243;
   border: none;
+}
+
+.btnGoogle{
+  font-size: 30px;
+  border: none;
+  background: none;
 }
 
 .contenedorLike{
