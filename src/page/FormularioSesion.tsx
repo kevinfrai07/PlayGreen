@@ -1,10 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
+import {useNavigate} from "react-router-dom";
+import { useAuth } from '../context/AuthContext';
 
 
+export default function FormularioSesion() {
+  const auth = useAuth();
+  const navigate = useNavigate()
+  const [isAuth, setIsAuth] = useState(undefined);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-export default function FormularioSesion({setEmail,setPassword,handleRegister,handleLogin,handleGoogle}) {
-    
+    const handleRegister = (e: any) => {
+        e.preventDefault();
+        if (email && password) {
+          auth.register(email, password);
+        }
+      };
+      const handleLogin = (e: any) => {
+        e.preventDefault();
+        if (email && password) {
+          auth.login(email, password);
+          setIsAuth(auth.user['accessToken'])
+          navigate("/home");
+        }
+      };
+      const handleGoogle = (e: any) => {
+        e.preventDefault();
+        auth.loginWithGoogle();
+        setIsAuth(auth.user['accessToken'])
+        navigate("/home");
+      };
   const [form, setform] = useState("Login");
   const changeForm = (e:any) => {
         e.preventDefault();
@@ -14,6 +40,13 @@ export default function FormularioSesion({setEmail,setPassword,handleRegister,ha
             setform("Login")
         }
       };
+      useEffect(() => {
+        const getAuth = async () => {
+          auth.login(email, password);
+          setIsAuth(auth.user['accessToken'])
+        };
+        getAuth();
+      }, []);
     return (
         <div className="App">
             <div className="container text-center">
