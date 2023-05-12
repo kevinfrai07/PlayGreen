@@ -4,7 +4,7 @@ import FooterTabs from "../shared/FooterTabs";
 import futbol from "../assets/futbol.jpg"
 import { useNavigate } from "react-router-dom";
 
-export default function Historial(props) {
+export default function Historial(props:any) {
   const {setIsAuth} = props;
   const navigate = useNavigate()
   const returnHome = (e:any) => {

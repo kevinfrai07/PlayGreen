@@ -1,38 +1,73 @@
 import React, { useEffect, useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
-import { useAuth } from '../context/AuthContext';
-
+import {  GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup  } from 'firebase/auth';
+import { auth } from '../firebase/firebase.config';
 
 export default function FormularioSesion() {
-  const auth = useAuth();
   const navigate = useNavigate()
   const [isAuth, setIsAuth] = useState(undefined);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-    const handleRegister = (e: any) => {
-        e.preventDefault();
-        if (email && password) {
-          auth.register(email, password);
-        }
-      };
-      const handleLogin = (e: any) => {
-        e.preventDefault();
-        if (email && password) {
-          auth.login(email, password);
-          setIsAuth(auth.user['accessToken'])
-          navigate("/home");
-        }
-      };
-      const handleGoogle = (e: any) => {
-        e.preventDefault();
-        auth.loginWithGoogle();
-        setIsAuth(auth.user['accessToken'])
-        navigate("/home");
-      };
   const [form, setform] = useState("Login");
-  const changeForm = (e:any) => {
+  const provider = new GoogleAuthProvider()
+  
+    const handleRegister = async (e: any) => {
+        e.preventDefault();
+        if (email && password) {
+            await createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                console.log(user);
+                setform("Login")
+            // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage);
+                // ..
+            });
+        }
+      };
+
+      
+    const handleLogin = (e: any) => {
+        e.preventDefault();
+        if (email && password) {
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                navigate("/home")
+                console.log(user);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage)
+            });
+        //   setIsAuth(auth.user['accessToken'])
+        }
+      };
+    const handleGoogle = (e: any) => {
+        e.preventDefault();
+        signInWithPopup(auth, provider)
+        .then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential?.accessToken;
+            const user = result.user;
+            navigate("/home");
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            const credential = GoogleAuthProvider.credentialFromError(error);
+        });
+      };
+
+    const changeForm = (e:any) => {
         e.preventDefault();
         if(form==="Login"){
             setform("Register")
@@ -40,13 +75,21 @@ export default function FormularioSesion() {
             setform("Login")
         }
       };
-      useEffect(() => {
-        const getAuth = async () => {
-          auth.login(email, password);
-          setIsAuth(auth.user['accessToken'])
-        };
-        getAuth();
-      }, []);
+
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const uid = user.uid;
+            navigate("/home");
+            console.log("uid", uid)
+        } else {
+            console.log("user is logged out")
+        }
+        });
+         
+    }, [])
+
+
     return (
         <div className="App">
             <div className="container text-center">

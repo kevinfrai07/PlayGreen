@@ -1,23 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {FaHome,FaHistory,FaSignOutAlt} from 'react-icons/fa';
+import { ReactNode } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase.config";
 
-export default function FooterTabs({setIsAuth}) {
-  const auth = useAuth();
+export default function FooterTabs({setIsAuth} : any) {
   const navigate = useNavigate()
   const handleLogout = () => {
-    auth.logout();
+    signOut(auth).then(() => {
+          navigate("/");
+          console.log("Signed out successfully")
+      }).catch((error) => {
+        console.log(error)
+      });
     setIsAuth(undefined)
   }
 
   const history = () => {
-    auth.logout();
     setIsAuth(undefined)
     navigate("/history");
   }
 
   const home = () => {
-    auth.logout();
     setIsAuth(undefined)
     navigate("/home");
   }
