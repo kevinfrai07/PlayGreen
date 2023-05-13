@@ -4,14 +4,28 @@ import {FaHome,FaHistory,FaSignOutAlt} from 'react-icons/fa';
 import { ReactNode } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
+import { toast } from "react-toastify";
 
 export default function FooterTabs() {
   const navigate = useNavigate()
+  const showToastMessage = (type:boolean,text:string) => {
+    if(type){
+        toast.success(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }else{
+        toast.error(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }
+  }
+
   const handleLogout = () => {
     signOut(auth).then(() => {
-          navigate("/");
+      showToastMessage(true, "Sesión Cerrada Correctamente")
+      navigate("/");
       }).catch((error) => {
-        console.log(error)
+        showToastMessage(true, "Error Cerrando Sesión")
       });
   }
 

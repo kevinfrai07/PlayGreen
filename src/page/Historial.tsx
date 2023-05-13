@@ -10,6 +10,7 @@ import { auth } from "../firebase/firebase.config";
 import { leaguesInterface } from "../interfaces/leagues";
 import HistoryTabs from "../shared/HistoryTabs";
 import Loader from "../shared/Loader";
+import { toast } from "react-toastify";
 
 
 export default function Historial() {

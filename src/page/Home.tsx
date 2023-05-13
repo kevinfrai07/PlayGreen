@@ -8,14 +8,27 @@ import { auth, db } from "../firebase/firebase.config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Loader from "../shared/Loader";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const [next, setNext] = useState(0);
   const [leagues, setLeagues] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
   const navigate = useNavigate()
+  const showToastMessage = (type:boolean,text:string) => {
+    if(type){
+        toast.success(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }else{
+        toast.error(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }
+  }
 
   const modoNoche = () =>{
+    showToastMessage(true,"Modo Noche Activado")
     console.log("dio click")
   }
 
@@ -30,15 +43,14 @@ export default function Home() {
             strLeague: leagues[next]['strLeague'],
             isLike: islike
           });
-          console.log("Document written with ID: ", docRef.id);
+          showToastMessage(true,"League "+leagues[next]['strLeague']+" agregada" )
           setNext(next+1)
         } else {
-           console.log("user is logged out")
            navigate("/");
         }
      });
     } catch (e) {
-      console.error("Error adding document: ", e);
+      showToastMessage(false, "Error Agregando Liga")
     }
     if(next==leagues.length-1){
       setShowButtons(true)

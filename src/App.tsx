@@ -30,7 +30,7 @@ function App() {
           <Route path="/home" element={<Home/>} />
           <Route path="/history" element={<Historial/>} />
         </Routes>
-          <ToastContainer />
+        <ToastContainer />
       </AuthProvider>
     </BrowserRouter>
   )
