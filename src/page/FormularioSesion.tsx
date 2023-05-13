@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
 import {  GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup  } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
+import { toast } from 'react-toastify';
 
 export default function FormularioSesion() {
   const navigate = useNavigate()
-  const [isAuth, setIsAuth] = useState(undefined);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [form, setform] = useState("Login");
   const provider = new GoogleAuthProvider()
+  const showToastMessage = (type:boolean,text:string) => {
+    if(type){
+        toast.success(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }else{
+        toast.error(text, {
+            position: toast.POSITION.TOP_CENTER
+        });
+    }
+    
+};
   
     const handleRegister = async (e: any) => {
         e.preventDefault();
         if (email && password) {
             await createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log(user);
+            .then(() => {
+                showToastMessage(true,"Usuario Creado")
                 setform("Login")
-            // ...
             })
             .catch((error) => {
-                const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
-                // ..
+                showToastMessage(false,errorMessage)
             });
         }
       };
@@ -37,33 +44,26 @@ export default function FormularioSesion() {
         e.preventDefault();
         if (email && password) {
             signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
+            .then(() => {
+                showToastMessage(true,"Login Correcto")
                 navigate("/home")
-                console.log(user);
             })
             .catch((error) => {
-                const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage)
+                showToastMessage(false,errorMessage)
             });
-        //   setIsAuth(auth.user['accessToken'])
         }
       };
     const handleGoogle = (e: any) => {
         e.preventDefault();
         signInWithPopup(auth, provider)
-        .then((result) => {
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            const user = result.user;
-            navigate("/home");
+        .then((resp) => {
+            GoogleAuthProvider.credentialFromResult(resp);
+                showToastMessage(true,"Login Correcto")
+                navigate("/home");
         }).catch((error) => {
-            const errorCode = error.code;
             const errorMessage = error.message;
-            const email = error.customData.email;
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            showToastMessage(false,errorMessage)
         });
       };
 
@@ -79,15 +79,12 @@ export default function FormularioSesion() {
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
         if (user) {
-            const uid = user.uid;
             navigate("/home");
-            console.log("uid", uid)
         } else {
-            console.log("user is logged out")
+            navigate("/");
         }
         });
-         
-    }, [])
+    }, )
 
 
     return (

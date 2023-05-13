@@ -1,80 +1,82 @@
 import futbol from "../assets/futbol.jpg"
 import FooterTabs from "../shared/FooterTabs"
-import {FaGratipay,FaTimesCircle,FaSun,FaMoon} from 'react-icons/fa';
+import {FaGratipay,FaTimesCircle,FaMoon} from 'react-icons/fa';
 import {useEffect, useState,} from 'react'
 import { getSearchLeagues } from "../service/listSport";
-import {leaguesInterface} from "../interfaces/leagues"
-export default function Home(props) {
-  const {setIsAuth} = props;
+import { addDoc, collection } from "firebase/firestore";
+import { auth, db } from "../firebase/firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import Loader from "../shared/Loader";
+
+export default function Home() {
   const [next, setNext] = useState(0);
   const [leagues, setLeagues] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
-  const [leaguesLike, setLeaguesLike] = useState([]);
-  const [leaguesDisLike, setLeaguesDisLike] = useState([]);
+  const navigate = useNavigate()
 
-  const verListas = () =>{
+  const modoNoche = () =>{
     console.log("dio click")
   }
 
-  const disLike = () =>{
-    leaguesDisLike.push(leagues[next])
-    setLeaguesDisLike(leaguesDisLike)
-    console.log("dislike", leaguesDisLike)
-    setNext(next+1)
+  const isLike = async (islike:boolean) =>{
+    try {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const docRef = await addDoc(collection(db, "historyLikes"), {
+            idLeague: leagues[next]['idLeague'],
+            idUser: user.uid,
+            strBadge: leagues[next]['strBadge'],
+            strLeague: leagues[next]['strLeague'],
+            isLike: islike
+          });
+          console.log("Document written with ID: ", docRef.id);
+          setNext(next+1)
+        } else {
+           console.log("user is logged out")
+           navigate("/");
+        }
+     });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
     if(next==leagues.length-1){
       setShowButtons(true)
    }else{
     setShowButtons(false)
    }
   }
-
-  const Like = () =>{
-    leaguesLike.push(leagues[next])
-    setLeaguesLike(leaguesLike)
-    console.log("Like", leaguesLike)
-    setNext(next+1)
-    if(next==leagues.length-1){
-      setShowButtons(true)
-   }else{
-    setShowButtons(false)
-   }
-  }
-
-    useEffect(() => {
-        const getLeagues = async () => {
-            const data = await getSearchLeagues();
-            setLeagues(data.countries);
-            console.log(data.countries)
-        };
-        getLeagues();
-    }, []);
-
-
-
+  useEffect(() => {
+      const getLeagues = async () => {
+          const data = await getSearchLeagues();
+          setLeagues(data.countries);
+      };
+      getLeagues();
+  }, []);
 
   return (
     <>
     <div className="contenedorimgPrincipal">
       <div className="contenedorButton">
-        <button onClick={() =>verListas()} className="botonprincipal"><FaMoon/></button>
+        <button onClick={() =>modoNoche()} className="botonprincipal"><FaMoon/></button>
       </div>
       {
         Array.isArray(leagues) && next<leagues.length ? leagues.map((league:any,index:number) => {
           if(index === next)
             return<img src={league.strBadge}  key={league.idLeague} className="rounded w-100 d-block homeImage" alt=""></img>
         })
-        :<img src={futbol} className="rounded w-100 d-block homeImage" alt="No hay más Ligas"></img>
+        :<Loader/>
       }
     </div>
     <div className="contenedorLike">
       <div className="row my-5">
         <div className="col-6 text-end close my-auto">
-          <button disabled={showButtons} className="closeIcon" onClick={() =>disLike()}>
+          <button disabled={showButtons} className="closeIcon" onClick={() =>isLike(false)}>
             <FaTimesCircle/>
           </button>
         </div>
         <div className="col-6">
-          <button disabled={showButtons} className="closeIcon favorite" onClick={() =>Like()}>
+          <button disabled={showButtons} className="closeIcon favorite" onClick={() =>isLike(true)}>
             <FaGratipay/>
           </button>
         </div>
@@ -83,7 +85,7 @@ export default function Home(props) {
         }
       </div>
     </div>
-     <FooterTabs setIsAuth={setIsAuth}></FooterTabs>
+     <FooterTabs></FooterTabs>
     </>
   )
 }

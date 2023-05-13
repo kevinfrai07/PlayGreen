@@ -14,6 +14,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import './App.css'
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -26,9 +27,10 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<FormularioSesion />} />
-          <Route path="/home" element={<Home setIsAuth={setIsAuth}></Home>} />
-          <Route path="/history" element={<Historial setIsAuth={setIsAuth}></Historial>} />
+          <Route path="/home" element={<Home/>} />
+          <Route path="/history" element={<Historial/>} />
         </Routes>
+          <ToastContainer />
       </AuthProvider>
     </BrowserRouter>
   )

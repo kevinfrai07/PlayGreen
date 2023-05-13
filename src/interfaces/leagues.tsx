@@ -1,6 +1,7 @@
 export interface leaguesInterface {
     idLeague: string
+    idUser: string
     strBadge: string
     strLeague: string
-    state: string
+    isLike: string
 }

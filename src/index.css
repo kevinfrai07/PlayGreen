@@ -51,6 +51,16 @@ body{
   background: none;
 }
 
+.divLoader{
+  object-fit: fill;
+  height: 66vh;
+}
+
+.loader{
+  position: fixed;
+  bottom: 60%;
+}
+
 .favorite{
   font-size: 61px;
   color: #236BFE;
@@ -73,6 +83,13 @@ body{
   background: none;
   font-size: 25px;
   color: #777777;
+}
+
+.contentCards{
+  overflow-y: auto;
+  min-height: 70vh;
+  max-height: 70vh;
+
 }
 
 .iconsHistoryLeft{
