@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 
-const Body = styled.body`
-overflow-y: hidden;
-overflow-x: hidden;
-background-color: #E5E5E5;
-`;
+interface darkModeProps{
+    isDark : boolean
+}
 
 /*Se herada para las Imagenes*/
 const Img = styled.img` 
@@ -21,10 +19,10 @@ const Title = styled.h1`
 font-size: 3rem;
 `;
 
-const HomeImage = styled(Img)`
+const HomeImage = styled(Img)<darkModeProps>`
 object-fit: fill;
 height: 66vh;
-background-color: #212529;
+background-color: ${(props) => (props.isDark ? '#fff' : '#26435f')};
 `;
 
 const TextImgHome = styled.div`
@@ -35,6 +33,8 @@ font-size: 2rem;
 background-color: rgb(255, 255, 255, 0.9);
 opacity: .5;
 height: 8vh;
+border-bottom-right-radius: 1rem;
+border-bottom-left-radius: 1rem;
 `;
 
 const ContenedorimgPrincipal = styled.div`
@@ -46,13 +46,13 @@ const ContenedorButton = styled.div`
 position: absolute;
 margin: 15px 15px 15px;
 `;
-const Botonprincipal = styled.button`
-background: #fff /*#222243*/;
+const Botonprincipal = styled.button<darkModeProps>`
+background: ${(props) => (props.isDark ? '#fff' : '#222243')};
 height: 3rem;
 border-radius: 1rem;
 width: 3rem;
 color: #e3ff00;
-border: none;
+border: solid #222243;
 `;
 
 const BtnGoogle = styled.button`
@@ -70,9 +70,10 @@ const Close = styled.div`
 font-size:  41px;
 `;
 
-const CloseIcon = styled.button`
+const CloseIcon = styled.button<darkModeProps>`
 border: none;
 background: none;
+color: ${(props) => (props.isDark ? '#D36060' : '#fff')};
 `;
 
 const DivLoader = styled.div`
@@ -96,8 +97,8 @@ bottom: 1rem;
 width: 100%;
 `;
 
-const TabsIcons = styled.div`
-background-color: #fff;
+const TabsIcons = styled.div<darkModeProps>`
+background-color: ${(props) => (props.isDark ? '#fff' : '#2C2B3E')};
 height: 8vh;
 width: 90%;
 `;
@@ -153,7 +154,6 @@ opacity: .5;
 `;
 
 export const styles = {
-    Body,
     Img,
     AppDiv,
     Title,

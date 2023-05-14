@@ -5,7 +5,8 @@ import { auth } from "../firebase/firebase.config";
 import { toast } from "react-toastify";
 import { styles } from '../styles/styles';
 
-export default function FooterTabs() {
+export default function FooterTabs(props:any) {
+  const {isDark} = props
   const {Footer, TabsIcons, IconTab} = styles
   const navigate = useNavigate()
   const showToastMessage = (type:boolean,text:string) => {
@@ -41,7 +42,7 @@ export default function FooterTabs() {
   return(
     <Footer>
       <div className="container ">
-        <TabsIcons className="row rounded mx-auto">
+        <TabsIcons isDark={isDark} className="row rounded mx-auto">
           <div className="col-4 my-auto text-start">
             <IconTab onClick={()=> home()}><FaHome/></IconTab>
           </div>

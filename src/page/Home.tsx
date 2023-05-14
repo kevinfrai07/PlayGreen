@@ -1,5 +1,5 @@
 import FooterTabs from "../shared/FooterTabs"
-import {FaGratipay,FaTimesCircle,FaMoon, FaSun} from 'react-icons/fa';
+import {FaGratipay,FaTimes, FaMoon, FaSun} from 'react-icons/fa';
 import {useEffect, useState,} from 'react'
 import { getSearchLeagues } from "../service/listSport";
 import { addDoc, collection } from "firebase/firestore";
@@ -38,10 +38,10 @@ export default function Home(props:any) {
 
   const modoNoche = () =>{
     if(darkMode){
-      showToastMessage(true,"Modo Noche Activado")
+      // showToastMessage(true,"Modo Noche Activado")
       setDarkMode(!darkMode)
     }else{
-      showToastMessage(true,"Modo Noche Desactivado")
+      // showToastMessage(true,"Modo Noche Desactivado")
       setDarkMode(!darkMode)
     }
     props.sendData(darkMode)
@@ -85,14 +85,14 @@ export default function Home(props:any) {
     <>
     <ContenedorimgPrincipal>
       <ContenedorButton>
-        <Botonprincipal onClick={() =>modoNoche()} >{darkMode?<FaMoon/>:<FaSun/>}</Botonprincipal>
+        <Botonprincipal isDark={darkMode} onClick={() =>modoNoche()} >{darkMode?<FaMoon/>:<FaSun/>}</Botonprincipal>
       </ContenedorButton>
       {
         Array.isArray(leagues) && next<leagues.length ? leagues.map((league:leaguesInterface,index:number) => {
           if(index === next)
             return(
               <>
-                <HomeImage src={league.strBadge}  key={league.idLeague} className="rounded w-100 d-block" alt=""></HomeImage>
+                <HomeImage src={league.strBadge}  key={league.idLeague} className="rounded w-100 d-block" alt="" isDark={darkMode}></HomeImage>
                 <TextImgHome className="text-center"><span>{sliceText(league.strLeague)}</span></TextImgHome>
               </>
             )
@@ -103,12 +103,12 @@ export default function Home(props:any) {
     <ContenedorLike>
       <div className="row">
         <Close className="col-6 text-end my-auto">
-          <CloseIcon disabled={showButtons} onClick={() =>isLike(false)}>
-            <FaTimesCircle/>
+          <CloseIcon isDark={darkMode} disabled={showButtons} onClick={() =>isLike(false)}>
+            <FaTimes/>
           </CloseIcon>
         </Close>
         <div className="col-6">
-          <Favorite disabled={showButtons} className="favorite" onClick={() =>isLike(true)}>
+          <Favorite disabled={showButtons} className="favorite" onClick={() =>isLike(true)} isDark={darkMode}>
             <FaGratipay/>
           </Favorite>
         </div>
@@ -117,7 +117,7 @@ export default function Home(props:any) {
         }
       </div>
     </ContenedorLike>
-     <FooterTabs></FooterTabs>
+     <FooterTabs isDark={darkMode}></FooterTabs>
     </>
   )
 }

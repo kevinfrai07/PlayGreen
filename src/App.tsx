@@ -10,10 +10,14 @@ import './styles/styles.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-
   const [darkMode, setDarkMode] = useState(false); //False -> Activado && True DesActivado
   const sendData = (data:boolean) => {
     setDarkMode(data)
+    if(darkMode){
+      document.body.style.backgroundColor = "#E5E5E5"
+    }else{
+      document.body.style.backgroundColor = "#181828"
+    }
   }
 
   return (
