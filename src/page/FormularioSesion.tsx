@@ -4,8 +4,10 @@ import {useNavigate} from "react-router-dom";
 import {  GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup  } from 'firebase/auth';
 import { auth } from '../firebase/firebase.config';
 import { toast } from 'react-toastify';
+import { styles } from '../styles/styles';
 
 export default function FormularioSesion() {
+  const {AppDiv, Title, BtnGoogle} = styles
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -88,11 +90,11 @@ export default function FormularioSesion() {
 
 
     return (
-        <div className="App">
+        <AppDiv>
             <div className="container text-center">
                 <div className="row align-items-center">
                     <div className="col align-self-center">
-                        <h1 className='fw-bold title'>Welcome</h1>
+                        <Title className='fw-bold'>Welcome</Title>
                         <a onClick={(e) => changeForm(e)} className="button">
                             {form === "Login" ? "Sign Up":"Sing In"}
                         </a>
@@ -129,13 +131,13 @@ export default function FormularioSesion() {
                                     Login
                                 </button>
                                 Or
-                                <button className='btnGoogle mx-1' onClick={(e) => handleGoogle(e)}><FaGoogle/></button>
+                                <BtnGoogle className='mx-1' onClick={(e) => handleGoogle(e)}><FaGoogle/></BtnGoogle>
                             </div>
                         </form>
                         }
                     </div>
                 </div>
             </div>
-        </div>
+        </AppDiv>
     )
 }

@@ -1,7 +1,6 @@
-import { FaGratipay, FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import "../App.css";
 import FooterTabs from "../shared/FooterTabs";
-import futbol from "../assets/futbol.jpg"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getHistory } from "../service/getHistory";
@@ -10,10 +9,11 @@ import { auth } from "../firebase/firebase.config";
 import { leaguesInterface } from "../interfaces/leagues";
 import HistoryTabs from "../shared/HistoryTabs";
 import Loader from "../shared/Loader";
-import { toast } from "react-toastify";
+import { styles } from '../styles/styles';
 
 
 export default function Historial() {
+  const {Title, ContentCards, IconsHistoryLeft} = styles
   const [leagues, setLeagues] =  useState<leaguesInterface[]>();
   const navigate = useNavigate()
   
@@ -50,24 +50,24 @@ useEffect(()=>{
   return(
   <div className="Historial">
    <div>
-      <button className="iconsHistoryLeft mx-1" onClick={(e) => returnHome(e)}>
+      <IconsHistoryLeft className="mx-1" onClick={(e) => returnHome(e)}>
          <FaArrowLeft/>
-      </button>
+      </IconsHistoryLeft>
    </div>
    <div className="container my-3">
-      <h1 className='fw-bold title'>History</h1>
+      <Title className='fw-bold'>History</Title>
       <p className="text-break"> 
          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
          Placeat, cumque. Id, blanditiis! 
       </p>
-      <div className="contentCards">
-         {Array.isArray(leagues) && leagues.length>0 ? leagues.map((league:leaguesInterface)=>{
-               return <HistoryTabs key={league.idLeague} league={league}></HistoryTabs>
+      <ContentCards>
+         {Array.isArray(leagues) && leagues.length>0 ? leagues.map((league:any)=>{
+               return <HistoryTabs key={league.idLeague} leagues={league}></HistoryTabs>
          })
          :
          <Loader/>
          }
-      </div>
+      </ContentCards>
    </div>
   <FooterTabs></FooterTabs>
  </div>)

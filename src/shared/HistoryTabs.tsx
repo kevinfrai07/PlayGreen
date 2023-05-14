@@ -1,28 +1,38 @@
 import { leaguesInterface } from "../interfaces/leagues";
-import {FaGratipay,FaTimesCircle} from 'react-icons/fa';
+import {FaGratipay,FaTimes} from 'react-icons/fa';
+import { styles } from '../styles/styles';
 
-export default function HistoryTabs({league}:{league:leaguesInterface}) {
+export default function HistoryTabs({leagues}:{leagues:leaguesInterface}) {
 
-const leagueCards = league
+const {IconsHistory, CardHistory, ImgCol, ImgHistory, TextImg} = styles
+
+const leagueCards = leagues
+const sliceText = (data:string) => {
+  const resp = data.substring(data.length-14,data.length)
+  return resp
+};
 
   return(
-   <div className="row cardHistory rounded mx-1 my-1">
-        <div className="col-10 imgCol">
-          <img src={leagueCards.strBadge} className="rounded imgHistory w-100" alt=""></img>
-        </div>
+   <CardHistory className="row rounded mx-1 my-3">
+        <ImgCol className="col-10 rounded">
+          <ImgHistory src={leagueCards.strBadge} className="rounded w-100" alt=""></ImgHistory>
+          <TextImg className="rounded-bottom">
+            <span className="mx-3">{sliceText(leagueCards.strLeague)}</span>
+          </TextImg>
+        </ImgCol>
         <div className="col-2 my-auto text-center">
         {
           leagueCards.isLike ?
-          <button className="iconsHistory">
+          <IconsHistory>
               <FaGratipay/>
-          </button>
+          </IconsHistory>
           :
-          <button className="iconsHistory">
-              <FaTimesCircle/>
-          </button>
+          <IconsHistory className=" text-danger">
+              <FaTimes/>
+          </IconsHistory>
         
         }
         </div>
-    </div>
+    </CardHistory>
   )
 }

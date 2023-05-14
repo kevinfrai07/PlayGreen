@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import {FaHome,FaHistory,FaSignOutAlt} from 'react-icons/fa';
-import { ReactNode } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
 import { toast } from "react-toastify";
+import { styles } from '../styles/styles';
 
 export default function FooterTabs() {
+  const {Footer, TabsIcons, IconTab} = styles
   const navigate = useNavigate()
   const showToastMessage = (type:boolean,text:string) => {
     if(type){
@@ -24,7 +24,7 @@ export default function FooterTabs() {
     signOut(auth).then(() => {
       showToastMessage(true, "Sesión Cerrada Correctamente")
       navigate("/");
-      }).catch((error) => {
+      }).catch(() => {
         showToastMessage(true, "Error Cerrando Sesión")
       });
   }
@@ -39,20 +39,20 @@ export default function FooterTabs() {
 
 
   return(
-    <div className="footer">
+    <Footer>
       <div className="container ">
-        <div className="row rounded tabsIcons mx-auto">
+        <TabsIcons className="row rounded mx-auto">
           <div className="col-4 my-auto text-start">
-            <button className="iconTab" onClick={()=> home()}><FaHome/></button>
+            <IconTab onClick={()=> home()}><FaHome/></IconTab>
           </div>
           <div className="col-4 my-auto text-center">
-            <button className="iconTab " onClick={()=> history()}><FaHistory/></button>
+            <IconTab  onClick={()=> history()}><FaHistory/></IconTab>
           </div>
           <div className="col-4 my-auto text-end">
-            <button className="iconTab" onClick={()=> handleLogout()}><FaSignOutAlt/></button>
+            <IconTab onClick={()=> handleLogout()}><FaSignOutAlt/></IconTab>
           </div>
-        </div>
+        </TabsIcons>
       </div>
-    </div>
+    </Footer>
   )
 }

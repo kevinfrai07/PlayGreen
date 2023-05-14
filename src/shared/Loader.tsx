@@ -1,11 +1,14 @@
+import { styles } from '../styles/styles';
+
 export default function Loader() {
+  const {DivLoader, Loader} = styles
   
   return(
-    <div className="divLoader text-primary text-center">
-      <div className="spinner-border loader" role="status">
+    <DivLoader className="text-primary text-center">
+      <Loader className="spinner-border" role="status">
        <span className="visually-hidden">Loading...</span>
-      </div>
-    </div>
+      </Loader>
+    </DivLoader>
     )
   }
   
