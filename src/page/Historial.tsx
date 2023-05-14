@@ -12,7 +12,8 @@ import Loader from "../shared/Loader";
 import { styles } from '../styles/styles';
 
 
-export default function Historial() {
+export default function Historial(props:any) {
+  const {isDark} = props
   const {Title, ContentCards, IconsHistoryLeft} = styles
   const [leagues, setLeagues] =  useState<leaguesInterface[]>();
   const navigate = useNavigate()
@@ -50,19 +51,19 @@ useEffect(()=>{
   return(
   <div className="Historial">
    <div>
-      <IconsHistoryLeft className="mx-1" onClick={(e) => returnHome(e)}>
+      <IconsHistoryLeft isDark={isDark} className="mx-1" onClick={(e) => returnHome(e)}>
          <FaArrowLeft/>
       </IconsHistoryLeft>
    </div>
    <div className="container my-3">
-      <Title className='fw-bold'>History</Title>
-      <p className="text-break"> 
+      <Title isDark={isDark} className='fw-bold'>History</Title>
+      <Title isDark={isDark} className="text-break fs-6"> 
          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
          Placeat, cumque. Id, blanditiis! 
-      </p>
+      </Title>
       <ContentCards>
          {Array.isArray(leagues) && leagues.length>0 ? leagues.map((league:any)=>{
-               return <HistoryTabs key={league.idLeague} leagues={league}></HistoryTabs>
+               return <HistoryTabs key={league.idLeague} leagues={league} isDark={isDark}></HistoryTabs>
          })
          :
          <Loader/>

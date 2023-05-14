@@ -10,7 +10,7 @@ import './styles/styles.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false); //False -> Activado && True DesActivado
+  const [darkMode, setDarkMode] = useState(Boolean); //False -> Activado && True DesActivado
   const sendData = (data:boolean) => {
     setDarkMode(data)
     if(darkMode){
@@ -24,9 +24,9 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<FormularioSesion />} />
+          <Route path="/" element={<FormularioSesion isDark={darkMode}/>} />
           <Route path="/home" element={<Home sendData={sendData}/>} />
-          <Route path="/history" element={<Historial/>} />
+          <Route path="/history" element={<Historial isDark={darkMode}/>} />
         </Routes>
         <ToastContainer />
       </AuthProvider>

@@ -14,7 +14,7 @@ import { styles } from '../styles/styles';
 export default function Home(props:any) {
   const {HomeImage, TextImgHome, ContenedorimgPrincipal, ContenedorButton,
   Botonprincipal, ContenedorLike, Close, CloseIcon, Favorite} = styles
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(Boolean);
   const [next, setNext] = useState(0);
   const [leagues, setLeagues] = useState([]);
   const [showButtons, setShowButtons] = useState(false);
